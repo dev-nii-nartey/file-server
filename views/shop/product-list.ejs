@@ -1,0 +1,62 @@
+<%- include('../includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/product.css">
+    <script src="https://kit.fontawesome.com/5e31a87df8.js"  defer></script>
+    <script src="/scripts/script.js" defer></script>
+</head>
+
+<body>
+    <%- include('../includes/navigation.ejs') %>
+
+    <main>
+        <form id="searchdiv">
+            <input type="text" placeholder="Search for your product" id="search-item" onkeyup="search()"><i class="fa-solid fa-magnifying-glass"></i>
+        </form>
+        <% if (prods.length > 0) { %>
+            <div class="grid" id="grid">
+                <% for (let product of prods) { %>
+                    <article class="card product-item"> 
+                        <header class="card__header">
+                            <h1 class="product__title"><%= product.title %></h1>
+                        </header>
+                        <div class="card__image">
+                            <img src="<%= product.imageUrl %>" 
+                                alt="<%= product.title %>">
+                        </div>
+                        <div class="card__content">
+                    
+                            <p class="product__description"><%= product.description %></p>
+                        </div>
+                        <div class="card__actions">
+                            <form action="/download" method="POST">
+                                <input id="thedata" type="hidden" name="filename" value="<%= product.fileName %>" id="file-link">
+                                <button class="btn" type="submit" title="Download <%= product.title %> to your local machine">Download <%= product.title %></button>
+                               
+                            </form>
+                        </div>
+                        <div class="card__actions">
+                        <button value="<%= product.fileName %>" type="button" class="btn sendMail" title="Send <%= product.title %> to your mail">Send to mail</button>
+                        </div>                    
+                    </article>
+                <% } %>
+            </div>
+        <% } else { %>
+            <h1>No Products Found!</h1>
+        <% } %>
+
+        <div id="overlay"  class="myOverlay">
+            <span class="closebtn" title="close overlay"> &#215 </span>
+            <div class="wrap">
+                <h2>Send file to your mail Here</h2>
+                <form action="/sendmail" method="POST" id="sendMailForm">
+                    <input  type="text" placeholder="Enter Your Name" name="name">
+                    <input  type="email" placeholder="Enter Your Email" name="email" required>
+                    <input  type='text' placeholder="Add a subject or heading to your mail...." name="subject">
+                     <textarea class="note2self"  rows="5" placeholder="Add a note for your self...." name="note" required></textarea>
+                     <input id="mailfilepath" type="hidden" name="mailfilepath">
+                    <button class="sendMailBtn" type="submit">Send Now</button>
+            </div>
+        </div>
+
+        <a href="/logout">Logout</a>
+    </main>
+<%- include('../includes/end.ejs') %>
